@@ -1,3 +1,10 @@
+/* Birthday confetti animation 
+.confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -66,3 +73,5 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+}*/
