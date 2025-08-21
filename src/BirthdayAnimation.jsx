@@ -2,30 +2,22 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./BirthdayAnimation.css"; // Import the CSS file
 
-// Helper component for floating elements (no changes needed here)
+// Helper component for floating elements
 const FloatingElement = ({ children, initialTop, initialLeft, duration, delay }) => {
   return (
     <motion.div
       className="absolute text-3xl md:text-4xl"
       style={{ top: initialTop, left: initialLeft, pointerEvents: 'none' }}
       initial={{ y: 0, opacity: 0 }}
-      animate={{ 
-        y: [0, -20, 0], 
-        opacity: [0, 0.7, 0] 
-      }}
-      transition={{
-        duration: duration,
-        delay: delay,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
+      animate={{ y: [0, -20, 0], opacity: [0, 0.7, 0] }}
+      transition={{ duration, delay, repeat: Infinity, ease: "easeInOut" }}
     >
       {children}
     </motion.div>
   );
 };
 
-// Helper component for animated text (no changes needed here)
+// Helper component for animated text
 const AnimatedText = ({ text, className, delay = 0 }) => {
   const letters = Array.from(text);
   const containerVariants = {
@@ -37,20 +29,15 @@ const AnimatedText = ({ text, className, delay = 0 }) => {
   };
   const letterVariants = {
     hidden: { opacity: 0, y: 20, x: -10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      x: 0,
-      transition: { type: "spring", damping: 12, stiffness: 200 },
-    },
+    visible: { opacity: 1, y: 0, x: 0, transition: { type: "spring", damping: 12, stiffness: 200 }},
   };
   return (
+    // KEY CHANGE: Added "animated-text-container" to handle wrapping and centering
     <motion.div
-      className={className}
+      className={`animated-text-container ${className}`} 
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      style={{ display: 'flex' }}
     >
       {letters.map((letter, index) => (
         <motion.span key={index} variants={letterVariants}>
@@ -67,8 +54,7 @@ export default function BirthdayAnimation() {
   const [daysLeft, setDaysLeft] = useState(0);
 
   // --- CONFIGURATION ---
-  // SET THE BIRTHDAY DATE HERE!
-  const birthdayDate = new Date("2025-09-04T00:00:00");
+  const birthdayDate = new Date("2025-09-04T00:00:00"); // SET THE BIRTHDAY DATE HERE!
 
   useEffect(() => {
     const today = new Date();
@@ -94,12 +80,7 @@ export default function BirthdayAnimation() {
   return (
     <div className="birthday-container">
       <div className="pulse-bg"></div>
-
-      {backgroundElements.map((el) => (
-        <FloatingElement key={el.id} {...el}>{el.emoji}</FloatingElement>
-      ))}
-      
-      {/* Background Music - REMEMBER to replace 'path/to/your/song.mp3' */}
+      {backgroundElements.map((el) => (<FloatingElement key={el.id} {...el}>{el.emoji}</FloatingElement>))}
       <audio src="path/to/your/romantic/song.mp3" autoPlay loop />
 
       <AnimatePresence>
@@ -114,13 +95,7 @@ export default function BirthdayAnimation() {
             onClick={handleOpen}
           >
             <div className="envelope-flap"></div>
-            <motion.div
-              className="envelope-icon"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-            >
-              💌
-            </motion.div>
+            <motion.div className="envelope-icon" animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1.5 }}>💌</motion.div>
             <p className="envelope-text">Click Me, My Love</p>
           </motion.div>
         )}
@@ -136,55 +111,23 @@ export default function BirthdayAnimation() {
         >
           {showCardContent && (
             <>
-              <motion.div 
-                className="card-photo-wrapper"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.8, type: "spring" }}
-              >
-                <img 
-                  src="https://via.placeholder.com/200" // <-- REPLACE THIS URL
-                  alt="A special moment" 
-                  className="card-photo"
-                />
+              <motion.div className="card-photo-wrapper" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.2, duration: 0.8, type: "spring" }}>
+                <img src="https://via.placeholder.com/200" alt="A special moment" className="card-photo" />
               </motion.div>
 
-              <AnimatedText 
-                text="Happy Birthday," 
-                className="card-h1"
-                delay={0.5}
-              />
-              <AnimatedText 
-                text="My Dearest Simran 💖" 
-                className="card-h2-gradient"
-                delay={1.5}
-              />
+              <AnimatedText text="Happy Birthday," className="card-h1" delay={0.5} />
+              <AnimatedText text="My Dearest Simran 💖" className="card-h2-gradient" delay={1.5} />
 
-              <motion.p 
-                className="card-paragraph"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 3, duration: 1 }}
-              >
+              <motion.p className="card-paragraph" initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 3, duration: 1 }}>
                 Every day with you is a gift, and today we celebrate the most precious gift of all – you.
               </motion.p>
               
-              <motion.div
-                className="card-countdown"
-                initial={{ y: 30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 3.8, duration: 0.8, type: "spring" }}
-              >
+              <motion.div className="card-countdown" initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 3.8, duration: 0.8, type: "spring" }}>
                 <p className="card-countdown-text">Just {daysLeft} Days Until We Celebrate!</p>
                 <p className="card-countdown-icon">📅</p>
               </motion.div>
 
-              <motion.p
-                className="card-footer"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 4.5, duration: 1 }}
-              >
+              <motion.p className="card-footer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 4.5, duration: 1 }}>
                 Forever and always yours.
               </motion.p>
             </>
