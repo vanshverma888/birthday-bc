@@ -1,18 +1,23 @@
-/* Birthday confetti animation 
-.confetti {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
 
+/* Global styles with romantic theme */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  font-family: 'Inter', 'Georgia', 'Times New Roman', serif;
+  line-height: 1.6;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Romantic color palette */
+  --primary-pink: #ff6b9d;
+  --secondary-pink: #ffc3d8;
+  --accent-rose: #ff8fab;
+  --soft-lavender: #e8d5ff;
+  --warm-cream: #fff5f5;
+  --deep-purple: #8b5a8c;
+  --gold-accent: #ffd700;
+  
+  color-scheme: light;
+  color: #4a4a4a;
+  background: linear-gradient(135deg, var(--warm-cream) 0%, var(--secondary-pink) 50%, var(--soft-lavender) 100%);
+  min-height: 100vh;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,58 +25,111 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  padding: 0;
   display: flex;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
   min-width: 320px;
+  min-height: 100vh;
+  background: inherit;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  max-width: 100vw;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 100vh;
 }
 
+/* Romantic floating hearts background */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 107, 157, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(232, 213, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(255, 195, 216, 0.1) 0%, transparent 50%);
+  animation: float-bg 20s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes float-bg {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+/* Responsive typography */
 h1 {
-  font-size: 3.2em;
+  font-size: clamp(2rem, 5vw, 3.2rem);
   line-height: 1.1;
+  text-align: center;
+  color: var(--deep-purple);
+  margin: 1rem 0;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  text-align: center;
+  color: var(--primary-pink);
+  margin: 0.5rem 0;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+p {
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  text-align: center;
+  line-height: 1.6;
+  margin: 1rem 0;
+  color: #5a5a5a;
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  #root {
+    padding: 0.5rem;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+  
+  body {
+    padding: 0;
   }
 }
 
-}*/
+@media (max-width: 480px) {
+  #root {
+    padding: 0.25rem;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.4rem;
+  }
+  
+  p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
