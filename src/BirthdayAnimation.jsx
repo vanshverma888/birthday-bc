@@ -55,6 +55,98 @@ const AnimatedText = ({ text, className, delay = 0 }) => {
   );
 };
 
+// Celebration popup component
+const CelebrationPopup = ({ show, onClose }) => {
+  const [flowers, setFlowers] = useState([]);
+
+  useEffect(() => {
+    if (show) {
+      // Generate flowers for explosion
+      const flowerEmojis = ['🌸', '🌺', '🌻', '🌷', '🌹', '💐', '🌼', '🏵️'];
+      const newFlowers = [];
+      
+      for (let i = 0; i < 20; i++) {
+        const angle = (360 / 20) * i;
+        const distance = 200 + Math.random() * 100;
+        const tx = Math.cos(angle * Math.PI / 180) * distance;
+        const ty = Math.sin(angle * Math.PI / 180) * distance;
+        
+        newFlowers.push({
+          id: i,
+          emoji: flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)],
+          tx,
+          ty,
+          delay: Math.random() * 0.5
+        });
+      }
+      
+      setFlowers(newFlowers);
+      
+      // Auto close after 4 seconds
+      const timer = setTimeout(onClose, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [show, onClose]);
+
+  if (!show) return null;
+
+  return (
+    <motion.div
+      className="celebration-popup"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <div className="celebration-content">
+        <motion.div
+          className="celebration-text"
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ duration: 1, type: "spring", bounce: 0.5 }}
+        >
+          🎉 SURPRISE! 🎉
+        </motion.div>
+        
+        <div className="flower-explosion">
+          {flowers.map((flower) => (
+            <motion.div
+              key={flower.id}
+              className="flower"
+              style={{
+                '--tx': `${flower.tx}px`,
+                '--ty': `${flower.ty}px`,
+              }}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: flower.delay }}
+            >
+              {flower.emoji}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// Bottom candles component
+const BottomCandles = () => {
+  return (
+    <div className="bottom-candles">
+      {[...Array(5)].map((_, index) => (
+        <motion.div
+          key={index}
+          className="bottom-candle"
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 2 + index * 0.2, duration: 0.8 }}
+        />
+      ))}
+    </div>
+  );
+};
+
 // Countdown timer component
 const CountdownTimer = () => {
   const [daysLeft, setDaysLeft] = useState(0);
@@ -99,6 +191,7 @@ const CountdownTimer = () => {
 
 export default function BirthdayAnimation() {
   const [showContent, setShowContent] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 500);
@@ -118,6 +211,14 @@ export default function BirthdayAnimation() {
 
   return (
     <div className="birthday-screen">
+      {/* Celebration Popup */}
+      <AnimatePresence>
+        <CelebrationPopup 
+          show={showCelebration} 
+          onClose={() => setShowCelebration(false)} 
+        />
+      </AnimatePresence>
+
       {/* Floating decorative elements */}
       {decorativeElements.map((el) => (
         <FloatingElement 
@@ -130,6 +231,9 @@ export default function BirthdayAnimation() {
           {el.element}
         </FloatingElement>
       ))}
+
+      {/* Bottom Candles */}
+      <BottomCandles />
 
       <div className="content-container">
         {showContent && (
